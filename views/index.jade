@@ -1,0 +1,22 @@
+
+doctype html
+html(lang="en")
+    head
+        //- page metadata attributes
+        meta(charset="utf-8")
+        meta(name="author", content="")
+        meta(name="description", content="")
+        title gitdash
+
+        //- included scripts
+        script(type="text/javascript", src="/components/jquery/jquery.min.js")
+        script(type="text/javascript", src="/components/angular/angular.min.js")
+        script(type="text/javascript", src="/components/angular-resource/angular-resource.min.js")
+        script(type="text/javascript", src="/components/angular-route/angular-route.min.js")
+        script(type="text/javascript", src="/js/app.js")
+        script(type="text/javascript", src="/js/controllers.js")
+        script(type="text/javascript", src="/js/directives.js")
+        script(type="text/javascript", src="/js/services.js")
+
+    body(ng-app="gitdeckApp")
+        <div ng-view></div>
