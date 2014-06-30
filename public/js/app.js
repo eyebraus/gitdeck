@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    var app = angular.module('gitdeckApp', ['ngRoute', 'gitdeckControllers']);
+    var app = angular.module('gitdeckApp', ['ngRoute', 'gitdeckControllers', 'gitdeckDirectives']);
 
     app.config([
         '$routeProvider',

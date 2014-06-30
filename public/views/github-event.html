@@ -1,0 +1,114 @@
+
+<div class="avatar-container">
+    <img class="github-avatar" ng-src="{{ event.actor.avatar_url }}"></img>
+</div>
+
+<div class="event-container" ng-switch on="event.type">
+    <!-- Commit comment -->
+    <div class="payload-container" ng-switch-when="CommitCommentEvent">
+        <strong>{{ event.actor.login }}</strong> left a comment on <strong>{{ event.repo.name }}</strong>:
+        <blockquote>{{ event.payload.comment.body }}</blockquote>
+    </div>
+
+    <!-- Create event -->
+    <div class="payload-container" ng-switch-when="CreateEvent">
+        <div ng-switch="event.payload.ref_type">
+            <span ng-switch-when="repository">
+                <strong>{{ event.actor.login }}</strong> created repository <strong>{{ event.repo.name }}</strong>.
+            </span>
+            <span ng-switch-when="branch">
+                <strong>{{ event.actor.login }}</strong> created branch <strong>{{ event.payload.ref }}</strong>.
+            </span>
+            <span ng-switch-when="tag">
+                <strong>{{ event.actor.login }}</strong> created tag <strong>{{ event.payload.ref }}</strong>.
+            </span>
+        </div>
+    </div>
+
+    <!-- Delete event -->
+    <div class="payload-container" ng-switch-when="DeleteEvent">
+        <div ng-switch="event.payload.ref_type">
+            <span ng-switch-when="branch">
+                <strong>{{ event.actor.login }}</strong> deleted branch <strong>{{ event.payload.ref }}</strong>.
+            </span>
+            <span ng-switch-when="tag">
+                <strong>{{ event.actor.login }}</strong> deleted tag <strong>{{ event.payload.ref }}</strong>.
+            </span>
+        </div>
+    </div>
+
+    <!-- Fork event -->
+    <div class="payload-container" ng-switch-when="ForkEvent">
+        <strong>{{ event.actor.login }}</strong> forked <strong>{{ event.repo.name }}</strong> to <strong>{{ event.payload.forkee }}</strong>.
+    </div>
+
+    <!-- Gollum event -->
+    <div class="payload-container" ng-switch-when="GollumEvent">
+        <strong>{{ event.actor.login }}</strong> updated pages for<strong>{{ event.repo.name }}</strong>:
+        <div class="page-update" ng-repeat="page in event.payload.pages">
+            {{ page.action }} <a ng-href="{{ page.html_url }}">{{ page.page_name }}</a>
+        </div>
+    </div>
+
+    <!-- Issue comment event -->
+    <div class="payload-container" ng-switch-when="IssueCommentEvent">
+        <strong>{{ event.actor.login }}</strong> left a comment on <strong>{{ event.payload.issue.title }}</strong>:
+        <blockquote>{{ event.payload.comment.body }}</blockquote>
+    </div>
+
+    <!-- Issues event -->
+    <div class="payload-container" ng-switch-when="IssuesEvent">
+        <strong>{{ event.actor.login }}</strong> {{ event.payload.action }} issue <strong>{{ event.payload.issue.title }}</strong>.
+    </div>
+
+    <!-- Member event -->
+    <div class="payload-container" ng-switch-when="MemberEvent">
+        <strong>{{ event.actor.login }}</strong> {{ event.payload.action }} <strong>{{ event.payload.member }}</strong> to <strong>{{ event.repo.name }}</strong>.
+    </div>
+
+    <!-- Public event -->
+    <div class="payload-container" ng-switch-when="PublicEvent">
+        <strong>{{ event.actor.login }}</strong> made <strong>{{ event.repo.name }}</strong> public. Yay!
+    </div>
+
+    <!-- Pull request event -->
+    <div class="payload-container" ng-switch-when="PullRequestEvent">
+        <strong>{{ event.actor.login }}</strong> issued <a ng-href="{{ event.payload.pull_request.html_url }}">pull request #{{ event.payload.number }}</a>.
+    </div>
+
+    <!-- Pull request review comment event -->
+    <div class="payload-container" ng-switch-when="PullRequestReviewCommentEvent">
+        <strong>{{ event.actor.login }}</strong> left a comment on <a ng-href="{{ event.payload.pull_request.html_url }}">pull request #{{ event.payload.number }}</a>:
+        <blockquote>{{ event.payload.comment.body }}</blockquote>
+    </div>
+
+    <!-- Push event -->
+    <div class="payload-container" ng-switch-when="PushEvent">
+        <strong>{{ event.actor.login }}</strong> pushed <strong>{{ event.payload.size }} commits</strong> to <strong>{{ event.payload.ref }}</strong>.
+    </div>
+
+    <!-- Release event -->
+    <div class="payload-container" ng-switch-when="ReleaseEvent">
+        <strong>{{ event.actor.login }}</strong> {{ event.payload.action }} release <a ng-href="{{ event.payload.release.html_url">{{ event.paylaod.name }}</a>.
+    </div>
+
+    <!-- Team add event -->
+    <div class="payload-container" ng-switch-when="TeamAddEvent">
+        <span ng-if="{{ event.payload.user }}">
+            <strong>{{ event.actor.login }}</strong> added <strong>{{ event.payload.user.login }}</strong> to team <strong>{{ event.payload.team.name }}</strong>.
+        </span>
+        <span ng-if="{{ event.payload.repository }}">
+            <strong>{{ event.actor.login }}</strong> added repository <strong>{{ event.payload.repository.name }}</strong> to team <strong>{{ event.payload.team.name }}</strong>.
+        </span>
+    </div>
+
+    <!-- Watch event -->
+    <div class="payload-container" ng-switch-when="WatchEvent">
+        <strong>{{ event.actor.login }}</strong> is now watching <strong>{{ event.repo.name }}</strong>.
+    </div>
+
+    <!-- Unrecognized events -->
+    <div class="payload-container" ng-switch-default>
+        Unrecognized event type: {{ event.type }}
+    </div>
+</div>
