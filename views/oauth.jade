@@ -6,10 +6,24 @@ html(lang="en")
         meta(charset="utf-8")
         meta(name="author", content="")
         meta(name="description", content="")
-        title gitdash
+        title gitdeck
+
+        //- imported styles
+        link(rel="stylesheet", href="/css/base.css")
+        link(rel="stylesheet", href="/css/skeleton.css")
+        link(rel="stylesheet", href="/css/layout.css")
+        link(rel="stylesheet", href="/css/style.css")
+
+        //- page favicon
+        link(rel="shortcut icon", href="/img/favicon.ico")
 
     body
-        p
-            | <strong>gitdeck</stronger> requires app users to authenticate via Github.
-            
-        a(href='' + oauthUrl) Sign in via oAuth!
+        .container
+            #app-view.sixteen.columns.row
+                h2 gitdeck.
+
+            .eight.columns.offset-by-four.row
+                p
+                    | <strong>gitdeck</stronger> requires app users to authenticate via Github.
+                    
+                a.button(href='' + oauthUrl) Sign in via oAuth!

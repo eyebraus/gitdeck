@@ -1,27 +1,15 @@
 
-<div class="events-feed-group">
-    <div class="events-feed">
+<div class="events-feed-group sixteen columns">
+    <div class="events-feed six columns alpha">
         <h4>Public Activity Feed</h4>
-        <div ng-repeat="event in IndexController.public_received_user_events">
-            <!--<div class="actor-content">
-                <a ng-href="{{ event.actor.url }}"><img ng-src="{{ event.actor.avatar_url }}"></img></a>
-            </div>
-            <div class="action-content">
-                <a ng-href="{{ event.repo.url }}">{{ event.repo.name }}</a> from <a ng-href="{{ event.actor.url }}">{{ event.actor.login }}</a>
-            </div>-->
+        <div class="four columns row" ng-repeat="event in IndexController.public_received_user_events">
             <github-event event="event"></github-event>
         </div>
     </div>
 
-    <div class="events-feed">
+    <div class="events-feed six columns alpha">
         <h4>Your Outgoing Events</h4>
-        <div ng-repeat="event in IndexController.public_user_events">
-            <!--<div class="actor-content">
-                <a ng-href="{{ event.actor.url }}"><img ng-src="{{ event.actor.avatar_url }}"></img></a>
-            </div>
-            <div class="action-content">
-                <a ng-href="{{ event.repo.url }}">{{ event.repo.name }}</a> from <a ng-href="{{ event.actor.url }}">You</a>
-            </div>-->
+        <div class="six columns row" ng-repeat="event in IndexController.public_user_events">
             <github-event event="event"></github-event>
         </div>
     </div>
