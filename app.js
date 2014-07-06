@@ -6,6 +6,7 @@
 var express = require('express')
   , http = require('http')
   , path = require('path')
+  , stylus = require('stylus')
   , events = require('./routes/events')
   , index = require('./routes/index')
   , oauth = require('./routes/oauth');
@@ -22,6 +23,12 @@ app.configure(function () {
     app.use(express.methodOverride());
     app.use(express.cookieParser());
     app.use(express.session({ secret: process.env.APP_GITHUB_OAUTH_SECRET }));
+    app.use(stylus.middleware({
+        src: path.join(__dirname, 'public'),
+        compile: function (str, path) {
+            return stylus(str).set('filename', path);
+        }
+    }));
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 

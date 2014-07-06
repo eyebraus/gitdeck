@@ -18,5 +18,18 @@ html(lang="en")
         script(type="text/javascript", src="/js/directives.js")
         script(type="text/javascript", src="/js/services.js")
 
+        //- imported styles
+        link(rel="stylesheet", href="/css/base.css")
+        link(rel="stylesheet", href="/css/skeleton.css")
+        link(rel="stylesheet", href="/css/layout.css")
+        link(rel="stylesheet", href="/css/style.css")
+
+        //- page favicon
+        link(rel="shortcut icon", href="/img/favicon.ico")
+
     body(ng-app="gitdeckApp")
-        <div ng-view></div>
+        .container
+            #app-header.sixteen.columns.row
+                h2 gitdeck.
+
+            <div id="app-view" class="sixteen columns row" ng-view></div>
