@@ -9,7 +9,7 @@ var express = require('express')
   , stylus = require('stylus')
   , events = require('./routes/events')
   , index = require('./routes/index')
-  , oauth = require('./routes/oauth');
+  , oauth = require('./util/github.oauth').instance;
 
 var app = express();
 
@@ -29,14 +29,23 @@ app.configure(function () {
             return stylus(str).set('filename', path);
         }
     }));
+    app.use(oauth.middleware());
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 
+    // configure the OAuth broker
+    oauth.configure({
+        client_id: process.env.GITHUB_GITDECK_KEY,
+        client_secret: process.env.GITHUB_GITDECK_SECRET
+    });
+    oauth.register('/', false);
+    oauth.register('/events');
+
     // set up application routes
-    app.get('/', oauth);
-    app.get('/index', index);
+    app.get('/', index);
     app.get('/events/user/:user/events_public', events.events_public);
     app.get('/events/user/:user/received_events_public', events.received_events_public);
+    app.get(oauth.path, oauth.landing());
 });
 
 app.configure('development', function () {
