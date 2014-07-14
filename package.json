@@ -14,7 +14,9 @@
         "express": "~3.3.4",
         "jade": "~0.34.0",
         "stylus": "^0.47.x",
-        "superagent": "^0.18.x"
+        "superagent": "^0.18.x",
+        "underscore": "^1.6.x",
+        "vargs": "^0.1.x"
     },
     "devDependencies": {
         "grunt": "~0.4.1",

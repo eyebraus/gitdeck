@@ -8,12 +8,12 @@
         '$routeProvider',
         function ($routeProvider) {
             $routeProvider
-                .when('/index/app', {
+                .when('/', {
                     controller: 'IndexController',
                     templateUrl: '/views/index.html'
                 })
                 .otherwise({
-                    redirectTo: '/index/app'
+                    redirectTo: '/'
                 });
         }]);
 })();

@@ -1,7 +1,8 @@
 
 var superagent = require('superagent')
   , url = require('url')
-  , util = require('util');
+  , util = require('util')
+  , oauth = require('../util/github.oauth').instance;
 
 module.exports.events_public = function (req, res) {
     // handle falsy user params
@@ -30,9 +31,17 @@ module.exports.events_public = function (req, res) {
         : superagent.get(req_url);
 
     request
-        .send({ 'access_token': req.session.access_token })
+        .query({ 'access_token': req.session.access_token })
         .set('Accept', 'application/json')
+        .set('User-Agent', 'eyebraus')
         .end(function (err, git_res) {
+            // old access token is invalid, re-authenticate
+            if (git_res.unauthorized || git_res.error || git_res.body.error) {
+                console.log('Token has expired or been invalidated, requesting new token...');
+                oauth.initiate(req, res);
+                return;
+            }
+
             // immediately forward any errors
             if (err) {
                 res.send(git_res.status, err);
@@ -40,9 +49,9 @@ module.exports.events_public = function (req, res) {
             }
 
             var status = git_res.status
-              , poll_interval = git_res.header['X-Poll-Interval']
-              , ratelimit_limit = git_res.header['X-RateLimit-Limit']
-              , ratelimit_remaining = git_res.header['X-RateLimit-Remaining'];
+              , poll_interval = git_res.header['x-poll-interval']
+              , ratelimit_limit = git_res.header['x-ratelimit-limit']
+              , ratelimit_remaining = git_res.header['x-ratelimit-remaining'];
 
             // if ETag matched, report that nothing has changed
             if (status === 304) {
@@ -86,9 +95,17 @@ module.exports.received_events_public = function (req, res) {
         : superagent.get(req_url);
 
     request
-        .send({ 'access_token': req.session.access_token })
+        .query({ 'access_token': req.session.access_token })
         .set('Accept', 'application/json')
+        .set('User-Agent', 'eyebraus')
         .end(function (err, git_res) {
+            // old access token is invalid, re-authenticate
+            if (git_res.unauthorized || git_res.error || git_res.body.error) {
+                console.log('Token has expired or been invalidated, requesting new token...');
+                oauth.initiate(req, res);
+                return;
+            }
+
             // immediately forward any errors
             if (err) {
                 res.send(git_res.status, err);
@@ -96,9 +113,9 @@ module.exports.received_events_public = function (req, res) {
             }
 
             var status = git_res.status
-              , poll_interval = git_res.header['X-Poll-Interval']
-              , ratelimit_limit = git_res.header['X-RateLimit-Limit']
-              , ratelimit_remaining = git_res.header['X-RateLimit-Remaining'];
+              , poll_interval = git_res.header['x-poll-interval']
+              , ratelimit_limit = git_res.header['x-ratelimit-limit']
+              , ratelimit_remaining = git_res.header['x-ratelimit-remaining'];
 
             // if ETag matched, report that nothing has changed
             if (status === 304) {
