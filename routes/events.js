@@ -2,7 +2,7 @@
 var superagent = require('superagent')
   , url = require('url')
   , util = require('util')
-  , oauth = require('../util/github.oauth');
+  , oauth = require('../util/github.oauth').instance;
 
 module.exports.events_public = function (req, res) {
     // handle falsy user params
@@ -31,7 +31,7 @@ module.exports.events_public = function (req, res) {
         : superagent.get(req_url);
 
     request
-        .send({ 'access_token': req.session.access_token })
+        .query({ 'access_token': req.session.access_token })
         .set('Accept', 'application/json')
         .set('User-Agent', 'eyebraus')
         .end(function (err, git_res) {
@@ -95,7 +95,7 @@ module.exports.received_events_public = function (req, res) {
         : superagent.get(req_url);
 
     request
-        .send({ 'access_token': req.session.access_token })
+        .query({ 'access_token': req.session.access_token })
         .set('Accept', 'application/json')
         .set('User-Agent', 'eyebraus')
         .end(function (err, git_res) {
