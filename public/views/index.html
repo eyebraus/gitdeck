@@ -1,8 +1,8 @@
 
-<div class="events-feed-group sixteen columns">
+<div class="events-feed-group sixteen columns" ng-hide="IndexController.errors.length > 0">
     <div class="events-feed six columns alpha">
         <h4>Public Activity Feed</h4>
-        <div class="four columns row" ng-repeat="event in IndexController.public_received_user_events">
+        <div class="six columns row" ng-repeat="event in IndexController.public_received_user_events">
             <github-event event="event"></github-event>
         </div>
     </div>
@@ -11,6 +11,21 @@
         <h4>Your Outgoing Events</h4>
         <div class="six columns row" ng-repeat="event in IndexController.public_user_events">
             <github-event event="event"></github-event>
+        </div>
+    </div>
+</div>
+
+<div class="sixteen columns" ng-show="IndexController.errors.length > 0">
+    <div class="six columns offset-by-five">
+        <p>It seems your access token has expired or has been revoked! :(</p>
+        <p>To continue using <strong>gitdeck</strong>, please authenticate below.</p>
+        <a class="button" href='{{ IndexController.oauth_url }}'>Sign in via oAuth!</a>
+    </div>
+
+    <div class="six columns offset-by-five">
+        <div ng-repeat="err in IndexController.errors">
+            <a href="{{ err.origin }}">{{ err.origin }}</a>:
+            <blockquote>{{ err.message }}</blockquote>
         </div>
     </div>
 </div>

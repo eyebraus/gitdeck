@@ -92,17 +92,8 @@ module.exports = (function () {
         //     redirect_url: the gitdeck OAuth landing page
         //     original_url: the original req address
         // TODO: pull gitdeck hostnames from config file
-        var redirect_url = url.format({
-                protocol: 'http',
-                host: 'localhost:3000',
-                pathname: this.path
-            })
-          , github_oauth_url = url.format({
-                protocol: 'https',
-                host: github_auth_host,
-                pathname: '/login/oauth/authorize',
-                query: { client_id: this.client_id, redirect_uri: redirect_url }
-            })
+        var redirect_url = this.redirect_url()
+          , github_oauth_url = this.oauth_url()
           , original_url = url.format({
                 protocol: 'http',
                 host: 'localhost:3000',
@@ -112,7 +103,7 @@ module.exports = (function () {
 
         // clear the session and set the callback appropriately
         delete req.session.scopes;
-        req.session.callback = original_url;
+        req.session.last_url_visited = original_url;
 
         res.render('oauth', { oauth_url: github_oauth_url });
     };
@@ -122,7 +113,7 @@ module.exports = (function () {
 
         return function (req, res) {
             var session_code = req.query.code
-              , callback = req.session.callback
+              , callback = req.session.last_url_visited
               , access_token_url = url.format({
                     protocol: 'https',
                     host: github_auth_host,
@@ -171,6 +162,26 @@ module.exports = (function () {
 
     OAuth.prototype.is_registered_path = function (path) {
         return this._search_paths(path, 'boolean');
+    };
+
+    OAuth.prototype.oauth_url = function () {
+        return url.format({
+            protocol: 'https',
+            host: github_auth_host,
+            pathname: '/login/oauth/authorize',
+            query: {
+                client_id: this.client_id,
+                redirect_uri: this.redirect_url()
+            }
+        });
+    };
+
+    OAuth.prototype.redirect_url = function () {
+        return url.format({
+            protocol: 'http',
+            host: 'localhost:3000',
+            pathname: this.path
+        });
     };
 
     OAuth.prototype._search_paths = function (/* path[, return_type] */) {
