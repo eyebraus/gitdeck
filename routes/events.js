@@ -38,7 +38,10 @@ module.exports.events_public = function (req, res) {
             // old access token is invalid, re-authenticate
             if (git_res.unauthorized || git_res.error || git_res.body.error) {
                 console.log('Token has expired or been invalidated, requesting new token...');
-                oauth.initiate(req, res);
+                res.send(403, { 
+                    message: 'Token has expired or been invalidated',
+                    oauth_url: oauth.oauth_url()
+                });
                 return;
             }
 
@@ -102,7 +105,10 @@ module.exports.received_events_public = function (req, res) {
             // old access token is invalid, re-authenticate
             if (git_res.unauthorized || git_res.error || git_res.body.error) {
                 console.log('Token has expired or been invalidated, requesting new token...');
-                oauth.initiate(req, res);
+                res.send(403, { 
+                    message: 'Token has expired or been invalidated',
+                    oauth_url: oauth.oauth_url()
+                });
                 return;
             }
 
